@@ -2,8 +2,14 @@ using System.Collections.Generic;
 
 public class Answer
 {
-    private string _solution;
+    private Solution _solution;
+
     private int _answer;
+    /*{
+        get => _solution.Answer;
+        set => _solution.Answer = value;
+    }*/
+    
     private List<int> _elementsList;
 
     public void AddElement(int element)
@@ -11,33 +17,46 @@ public class Answer
         _elementsList.Add(element);
     }
 
+    public override string ToString()
+    {
+        return $"{nameof(_solution)}: {_solution}, {nameof(_elementsList)}: {_elementsList}, {nameof(_answer)}: {_answer}";
+    }
+
     public List<int> GetElements()
     {
         return _elementsList;
     }
 
-    public string GetSolution()
+    public Solution GetSolution()
     {
         return _solution;
     }
 
-    public void SupplementSolution(string supplement)
+    public void AddElementInSolution(int number)
     {
-        _solution += supplement;
+        _solution.AddNumber(number);
     }
+    
+    
+    /*public void AddElementInSolution(Operator op)
+    {
+        _solution.AddOperator(op);
+    }*/
 
     public Answer()
     {
+        
+        _solution = new Solution();
         _answer = 0;
-        _solution = "";
         _elementsList = new List<int>();
     }
 
-    public Answer(int answer, List<int> elementsList, string solution)
+    public Answer(int answer, List<int> elementsList, Solution solution)
     {
-        _answer = answer;
         _elementsList = new List<int>(elementsList);
         _solution = solution;
+        _answer = answer;
+
     }
 
     public Answer Copy()
@@ -53,6 +72,13 @@ public class Answer
 
         return newAnswer;
     }
+    public Answer(Answer answerCopy)
+    {
+        _answer = answerCopy._answer;
+        _solution = answerCopy._solution;
+        _elementsList = new List<int>(answerCopy._elementsList);
+    }
+    
 
 
     public void RemoveElementAtIndex(int index)
@@ -80,6 +106,10 @@ public class Answer
     {
         return _answer;
     }
-        
-        
+
+
+    public void SetSolution(Solution solution)
+    {
+        _solution = new Solution(solution);
+    }
 }

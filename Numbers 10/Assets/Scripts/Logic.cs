@@ -1,105 +1,123 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
-public class Logic : MonoBehaviour
+public partial class Logic
 {
-    [SerializeField] public int target;
-    private void Awake()
+    public List<Solution> FindAllSolutions(List<int> numbers, List<Operator> operators, int target)
     {
-        var test = new Answer();
-        
-        test.AddElement(2);
-        test.AddElement(6);
-        test.AddElement(7);
-        test.AddElement(1);
-        //test.AddElement(9);
-
-        List<Answer> TestAnswersList;
-
-        
-        TestAnswersList = FindAnswers(FirstIteration(test));
-        while (TestAnswersList[0].ElementsCount()>0)
+        var answer = new Answer();
+        foreach (var element in numbers)
         {
-            TestAnswersList = FindAnswers(TestAnswersList);
+            answer.AddElement(element);
         }
+
+        return MakeSolutionsList(answer, operators, target);
+    }
+
+    private List<Solution> MakeSolutionsList(Answer task, List<Operator> operators, int target)
+    {
+        var allSolutions = new List<Solution>();
+        
+        var answersList = FirstIteration(task);
         
 
-        for (int i = 0; i < TestAnswersList.Count-1; i++)
+        while (answersList[0].ElementsCount() > 0)
         {
-            if (TestAnswersList[i].GetAnswer()==target)
-            {
-                Debug.Log(TestAnswersList[i].GetSolution());
-            }
+            answersList = FindAllAnswers(answersList, operators);
         }
-        
-        
-        
-        
 
-        /*foreach (var el in TestAnswersList)
+
+        for (var i = 0; i < answersList.Count - 1; i++)
         {
-            Debug.Log(el.GetAnswer()+"----"+el.GetSolution());
-        }*/
-        
+            if (answersList[i].GetAnswer() != target) continue;
+            
+            allSolutions.Add(answersList[i].GetSolution());
+                
+        }
 
+        return allSolutions;
     }
 
 
     private List<Answer> FirstIteration(Answer answer)
     {
         var newAnswer = new List<Answer>();
-            
+
         for (var i = 0; i < answer.ElementsCount(); i++)
         {
-            var tempAnswer = answer.Copy();
+            var tempAnswer = new Answer(answer);
             
+
             tempAnswer.SetAnswer(tempAnswer.GetElementByIndex(i));
-            tempAnswer.SupplementSolution(tempAnswer.GetElementByIndex(i).ToString());
             
             tempAnswer.RemoveElementAtIndex(i);
+            
+            var solution = new Solution(answer.GetSolution());
+            solution.SetAnswer(answer.GetElementByIndex(i));
+            solution.AddNumber(answer.GetElementByIndex(i));
+
+            tempAnswer.SetSolution(solution);
+            
+            
+            
             newAnswer.Add(tempAnswer);
         }
         
+        
+
         return newAnswer;
     }
 
-    private List<Answer> AllOperations(Answer answer)
+
+    private List<Answer> AllOperations(Answer answer, List<Operator> _operatorsList)
     {
         var newAnswer = new List<Answer>();
 
-        
+
         var ans = answer.GetAnswer();
 
-        for (int i = 0; i < answer.ElementsCount(); i++)
+        for (var i = 0; i < answer.ElementsCount(); i++)
         {
             var tempAnswer = answer.Copy();
+
             tempAnswer.RemoveElementAtIndex(i);
-            newAnswer.Add(new Answer(ans+answer.GetElementByIndex(i),tempAnswer.GetElements(),answer.GetSolution()+'+'+answer.GetElementByIndex(i)));
-            newAnswer.Add(new Answer(ans-answer.GetElementByIndex(i),tempAnswer.GetElements(),answer.GetSolution()+'-'+answer.GetElementByIndex(i)));
-            newAnswer.Add(new Answer(ans*answer.GetElementByIndex(i),tempAnswer.GetElements(),answer.GetSolution()+'*'+answer.GetElementByIndex(i)));
-            if (ans%answer.GetElementByIndex(i)==0)
+
+
+            foreach (var op in _operatorsList)
             {
-                newAnswer.Add(new Answer(ans/answer.GetElementByIndex(i),tempAnswer.GetElements(),answer.GetSolution()+'/'+answer.GetElementByIndex(i)));
+                var value = Calculate(ans, op, answer.GetElementByIndex(i));
+
+                if (value == null)
+                {
+                    continue;
+                }
+                
+                var solution = new Solution(answer.GetSolution());
+                solution.SetAnswer((int)value);
+                solution.AddOperator(op);
+                solution.AddNumber(answer.GetElementByIndex(i));
+
+                
+               
+
+                
+                
+                newAnswer.Add(new Answer((int) value, tempAnswer.GetElements(),solution));
             }
         }
 
-
         return newAnswer;
     }
-    
-    
 
 
-    private List<Answer> FindAnswers(List<Answer> originalList)
+    private List<Answer> FindAllAnswers(List<Answer> originalList, List<Operator> operators)
     {
-        List<Answer> answersList = new List<Answer>();
+        var answersList = new List<Answer>();
 
         foreach (var elem in originalList)
         {
-            foreach (var el in AllOperations(elem))
+            foreach (var el in AllOperations(elem, operators))
             {
                 answersList.Add(el);
             }
@@ -107,12 +125,67 @@ public class Logic : MonoBehaviour
 
         return answersList;
     }
+
+
+    private readonly Dictionary<Operator, Func<int, Operator, int, int?>> _OperatorsMap;
+
+
+    public Logic()
+    {
+        _OperatorsMap = new Dictionary<Operator, Func<int, Operator, int, int?>>
+        {
+            [Operator.Sum] = Sum,
+            [Operator.Sub] = Sub,
+            [Operator.Mul] = Mul,
+            [Operator.Div] = Div,
+        };
+    }
+    
+    
+    
+    
+
+
+    public int? Calculate(int a, Operator op, int b)
+    {
+        if (!_OperatorsMap.ContainsKey(op))
+        {
+            Console.WriteLine("Error");
+            return null;
+        }
+
+        var func = _OperatorsMap[op];
+        return func.Invoke(a, op, b);
+    }
+
+    private int? Div(int a, Operator op, int b)
+    {
+        if (a % b == 0)
+        {
+            return a / b;
+        }
+
+        return null;
+    }
+
+    private int? Mul(int a, Operator op, int b)
+    {
+        return a * b;
+    }
+
+    private int? Sub(int a, Operator op, int b)
+    {
+        return a - b;
+    }
+
+    private int? Sum(int a, Operator op, int b)
+    {
+        return a + b;
+    }
     
     
     
     
     
-    
-    
-    
+    //Логика для всех комбинаций из цифр
 }
