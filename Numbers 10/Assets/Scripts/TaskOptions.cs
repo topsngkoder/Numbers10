@@ -7,10 +7,12 @@ using UnityEngine;
     {
         public static List<TaskList> GenerateTaskOptions(int resolution)
         {
+            Debug.Log(DateTime.Now + "start generate all solutions");
             var taskOptionsList = new List<TaskList>();
             
             for (var i = (int)Math.Pow(10,resolution-1); i < Math.Pow(10,resolution); i++)
             {
+                Debug.Log(DateTime.Now + "start generate 1 solution");
             
                 var elementsList = new TaskList();
                 
@@ -28,7 +30,7 @@ using UnityEngine;
                 if (elementsList[0]==0)
                     continue;
                 
-                
+                Debug.Log(DateTime.Now+ "start remove similar");
                 var isContain = false;
                 
                 foreach (var taskList in taskOptionsList)
@@ -38,7 +40,6 @@ using UnityEngine;
                         isContain = true;
                         break;
                     }
-                    
                 }
 
                 if (isContain)
@@ -49,7 +50,7 @@ using UnityEngine;
                 
             }
         
-            PrintTaskList(taskOptionsList);
+            //PrintTaskList(taskOptionsList);
 
             return taskOptionsList;
         }
@@ -67,49 +68,4 @@ using UnityEngine;
                 Debug.Log(str);
             }
         }
-        
-        
-        
-        public class TaskList: List<int>
-        {
-            private TaskList Copy()
-            {
-                var listCopy = new TaskList();
-                foreach (var element in this)
-                {
-                    listCopy.Add(element);
-                }
-                return listCopy;
-            }
-            
-            
-            
-            public bool IsEqual(TaskList anotherTaskList)
-            {
-                var chek = true;
-                
-                if (Count != anotherTaskList.Count)
-                    return false;
-
-                var originalTaskList = Copy();
-                var chekTaskList = anotherTaskList.Copy();
-                
-                originalTaskList.Sort();
-                chekTaskList.Sort();
-
-                for (var i = 0; i < originalTaskList.Count; i++)
-                {
-                    if (originalTaskList[i]!=chekTaskList[i])
-                    {
-                        chek = false;
-                        break;
-                    }
-                }
-                return chek;
-            }
-        }
-        
-        
-        
-        
     }

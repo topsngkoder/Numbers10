@@ -326,6 +326,8 @@
 "Assets/Scripts/MainRoot.cs"
 "Assets/Scripts/Operator.cs"
 "Assets/Scripts/Solution.cs"
+"Assets/Scripts/SolutionFilters.cs"
+"Assets/Scripts/TaskList.cs"
 "Assets/Scripts/TaskOptions.cs"
 -langversion:8.0
 

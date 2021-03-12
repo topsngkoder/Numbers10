@@ -7,25 +7,42 @@ public class MainRoot : MonoBehaviour
     private void Start()
     {
         var logic = new Logic();
+        var filter = new SolutionFilters();
+        var target = 10;
         
         var operatorsList = new List<Operator>
         {
             Operator.Div, Operator.Mul, Operator.Sub, Operator.Sum
         };
         
-        var numbersList = new List<int>
+        
+
+        var aaaa = TaskOptions.GenerateTaskOptions(5);
+        
+        Debug.Log(DateTime.Now);
+
+        var counter = 0;
+
+        foreach (var task in aaaa)
         {
-            7,2,9,8
-        };
+            var findAllSolutions = logic.FindAllSolutions(task, operatorsList, target);
+            
+            var solutionsWithoutOnlySum = filter.RemoveOnlySum(findAllSolutions,target);
+           
+            if (solutionsWithoutOnlySum.Count==0)
+                continue; 
+            
+            counter++;
+                
+                Debug.Log("вар. "+ counter + " ---> " + findAllSolutions[0]);
+                
+            
 
-        var aaaa = TaskOptions.GenerateTaskOptions(4);
-
-        var findAllSolutions = logic.FindAllSolutions(numbersList, operatorsList, 10);
-
-        foreach (var solution in findAllSolutions)
-        {
-            //Debug.Log(solution);
+            
         }
+        
+
+        
         
         
     }

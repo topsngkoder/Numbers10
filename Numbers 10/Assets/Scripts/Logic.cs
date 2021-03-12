@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 public partial class Logic
 {
-    public List<Solution> FindAllSolutions(List<int> numbers, List<Operator> operators, int target)
+    public List<Solution> FindAllSolutions(TaskList numbers, List<Operator> operators, int target)
     {
         var answer = new Answer();
         foreach (var element in numbers)
@@ -15,8 +16,10 @@ public partial class Logic
         return MakeSolutionsList(answer, operators, target);
     }
 
+
     private List<Solution> MakeSolutionsList(Answer task, List<Operator> operators, int target)
     {
+        Debug.Log(DateTime.Now + "start generate all solutions");
         var allSolutions = new List<Solution>();
         
         var answersList = FirstIteration(task);
@@ -26,6 +29,7 @@ public partial class Logic
         {
             answersList = FindAllAnswers(answersList, operators);
         }
+        Debug.Log(DateTime.Now + "stop generate all solutions");
 
 
         for (var i = 0; i < answersList.Count - 1; i++)
@@ -35,9 +39,12 @@ public partial class Logic
             allSolutions.Add(answersList[i].GetSolution());
                 
         }
+        
 
         return allSolutions;
     }
+    
+    
 
 
     private List<Answer> FirstIteration(Answer answer)
