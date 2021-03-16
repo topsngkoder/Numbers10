@@ -7,13 +7,11 @@ using UnityEngine;
     {
         public static List<TaskList> GenerateTaskOptions(int resolution)
         {
-            Debug.Log(DateTime.Now + "start generate all solutions");
+            
             var taskOptionsList = new List<TaskList>();
             
             for (var i = (int)Math.Pow(10,resolution-1); i < Math.Pow(10,resolution); i++)
             {
-                Debug.Log(DateTime.Now + "start generate 1 solution");
-            
                 var elementsList = new TaskList();
                 
                 var fullNumber = i;
@@ -30,20 +28,19 @@ using UnityEngine;
                 if (elementsList[0]==0)
                     continue;
                 
-                Debug.Log(DateTime.Now+ "start remove similar");
-                var isContain = false;
-                
-                foreach (var taskList in taskOptionsList)
-                {
-                    if (taskList.IsEqual(elementsList))
-                    {
-                        isContain = true;
-                        break;
-                    }
-                }
-
-                if (isContain)
-                continue;
+                // var isContain = false;
+                //
+                // foreach (var taskList in taskOptionsList)
+                // {
+                //     if (taskList.IsEqual(elementsList))
+                //     {
+                //         isContain = true;
+                //         break;
+                //     }
+                // }
+                //
+                // if (isContain)
+                // continue;
             
             
                 taskOptionsList.Add(elementsList);
@@ -65,7 +62,6 @@ using UnityEngine;
                     str += i1.ToString();
                 }
 
-                Debug.Log(str);
             }
         }
     }

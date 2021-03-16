@@ -1,49 +1,41 @@
 using System;
 using System.Collections.Generic;
+using LogicDenisKo;
 using UnityEngine;
 
 public class MainRoot : MonoBehaviour
 {
     private void Start()
     {
-        var logic = new Logic();
+        var logic = new LogicDenisKo.LogicDenisKo();
         var filter = new SolutionFilters();
         var target = 10;
+        
+        
+        
+        
         
         var operatorsList = new List<Operator>
         {
             Operator.Div, Operator.Mul, Operator.Sub, Operator.Sum
         };
         
-        
+        //var tasksList = TaskOptions.GenerateTaskOptions(4);
 
-        var aaaa = TaskOptions.GenerateTaskOptions(5);
-        
-        Debug.Log(DateTime.Now);
+        var spisokIsChetyrexCifr = new List<int> {5,7,6,2};
 
-        var counter = 0;
 
-        foreach (var task in aaaa)
+        var result = logic.FindAllSolutions(spisokIsChetyrexCifr,operatorsList);
+
+
+        foreach (var elSolution in result)
         {
-            var findAllSolutions = logic.FindAllSolutions(task, operatorsList, target);
-            
-            var solutionsWithoutOnlySum = filter.RemoveOnlySum(findAllSolutions,target);
-           
-            if (solutionsWithoutOnlySum.Count==0)
-                continue; 
-            
-            counter++;
-                
-                Debug.Log("вар. "+ counter + " ---> " + findAllSolutions[0]);
-                
-            
-
-            
+            Debug.Log(elSolution);
         }
-        
 
-        
-        
-        
+
+
+
+
     }
 }

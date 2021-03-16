@@ -14,7 +14,6 @@ public class Solution
         Numbers = new List<int>();
         Operators = new List<Operator>();
         Answer = 0;
-        
     }
     
     public Solution(Solution solution)

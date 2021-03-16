@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
 
-public partial class Logic
+
+public class Logic
 {
     public List<Solution> FindAllSolutions(TaskList numbers, List<Operator> operators, int target)
     {
@@ -19,17 +18,18 @@ public partial class Logic
 
     private List<Solution> MakeSolutionsList(Answer task, List<Operator> operators, int target)
     {
-        Debug.Log(DateTime.Now + "start generate all solutions");
+        
         var allSolutions = new List<Solution>();
         
         var answersList = FirstIteration(task);
+        
         
 
         while (answersList[0].ElementsCount() > 0)
         {
             answersList = FindAllAnswers(answersList, operators);
         }
-        Debug.Log(DateTime.Now + "stop generate all solutions");
+        
 
 
         for (var i = 0; i < answersList.Count - 1; i++)
@@ -105,11 +105,6 @@ public partial class Logic
                 solution.AddOperator(op);
                 solution.AddNumber(answer.GetElementByIndex(i));
 
-                
-               
-
-                
-                
                 newAnswer.Add(new Answer((int) value, tempAnswer.GetElements(),solution));
             }
         }
@@ -194,5 +189,5 @@ public partial class Logic
     
     
     
-    //Логика для всех комбинаций из цифр
+    
 }
