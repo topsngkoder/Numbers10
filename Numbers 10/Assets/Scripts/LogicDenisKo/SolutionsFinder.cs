@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace LogicDenisKo
 {
-    public class LogicDenisKo: IFindSolutions
+    public class SolutionsFinder: IFindSolutions
     {
         public List<Solution> FindAllSolutions(List<int> numbers, List<Operator> operators)
         {
@@ -25,11 +25,20 @@ namespace LogicDenisKo
         
         }
         
-        private static List<List<T>>
-            GetPermutations<T>(List<T> list, int length)
+        private static List<List<T>> GetPermutations<T>(List<T> list, int length)
         {
-            if (length == 1) return list.Select(t => new[] {t}.ToList()).ToList();
+            
+            if (length == 1)
+            {
+                var res = list.Select(t => new[] {t}.ToList()).ToList();
+                return res;
+            }
 
+            var getPerm = GetPermutations(list, length - 1);
+            var selMany = getPerm.SelectMany(t => list.Where(e => !t.Contains(e)),
+                (t1, t2) => t1.Concat(new[] {t2}).ToList()).ToList();;
+            return selMany;
+            
             return GetPermutations(list, length - 1)
                 .SelectMany(t => list.Where(e => !t.Contains(e)),
                     (t1, t2) => t1.Concat(new[] {t2}).ToList()).ToList();
