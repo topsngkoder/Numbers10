@@ -7,7 +7,7 @@ public class MainRoot : MonoBehaviour
 {
     private void Start()
     {
-        var logic = new LogicDenisKo.LogicDenisKo();
+        var logic = new LogicDenisKo.SolutionsFinder();
         var filter = new SolutionFilters();
         var target = 10;
         
