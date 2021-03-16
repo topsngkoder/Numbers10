@@ -51,9 +51,10 @@ namespace Editor
             DrawFindButton();
             
             EditorGUILayout.BeginHorizontal("Box");
-
+            
             m_FiltersScrollPos = EditorGUILayout.BeginScrollView(m_FiltersScrollPos);
             EditorGUILayout.BeginVertical("Box",GUILayout.Width(250));
+            EditorGUILayout.LabelField("Filters");
             m_ResultFilterToggle = EditorGUILayout.Toggle("Result Filter",m_ResultFilterToggle);
             if (m_ResultFilterToggle)
             {
