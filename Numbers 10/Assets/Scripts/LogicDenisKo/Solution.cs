@@ -9,13 +9,18 @@ namespace LogicDenisKo
         public List<int> Numbers { get; }
         public List<Operator> Operators { get; }
 
-        public int? Result => OperationsList.Count < Numbers.Count - 1 ? null : OperationsList.Last().Result;
+        public int? Result => Numbers == null ||
+                              Numbers.Count == 0 ||
+                              OperationsList.Count < Numbers.Count - 1 ? null : OperationsList.Last().Result;
         public bool GotResult => Result != null;
         private List<Operation> OperationsList
         {
             get
             {
                 var result = new List<Operation>();
+                if (Numbers == null || Numbers.Count == 0)
+                    return result;
+                
                 var a = Numbers[0];
                 for (var i = 0; i < Numbers.Count - 1; i++)
                 {
