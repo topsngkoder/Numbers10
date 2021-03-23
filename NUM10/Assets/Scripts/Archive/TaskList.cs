@@ -21,7 +21,6 @@ public class TaskList: List<int>
             
         public bool IsEqual(TaskList anotherTaskList)
         {
-            Debug.Log(DateTime.Now + "start EQUAL test");
             var chek = true;
                 
             if (Count != anotherTaskList.Count)
@@ -41,7 +40,6 @@ public class TaskList: List<int>
                     break;
                 }
             }
-            Debug.Log(DateTime.Now + "stop EQUAL test");
             return chek;
         }
     }

@@ -10,7 +10,6 @@ namespace LogicDenisKo
         {
             var combinations = new List<Solution>();
             var numbersPermutations = GetPermutations(numbers);
-           // var operatorsCombinations = GetCombinations(operators, numbers.Count - 1);
             var operatorsVariations = GetVariations(operators, numbers.Count - 1);
 
             foreach (var numbersPermutation in numbersPermutations)

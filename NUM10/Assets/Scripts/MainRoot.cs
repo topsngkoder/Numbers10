@@ -20,18 +20,14 @@ public class MainRoot : MonoBehaviour
             Operator.Div, Operator.Mul, Operator.Sub, Operator.Sum
         };
         
-        //var tasksList = TaskOptions.GenerateTaskOptions(4);
-
-        var spisokIsChetyrexCifr = new List<int> {5,7,6,2};
-
-
-        var result = logic.FindAllSolutions(spisokIsChetyrexCifr,operatorsList);
+        
+       // var spisokIsChetyrexCifr = new List<int> {5,7,6,2};
 
 
-        foreach (var elSolution in result)
-        {
-            Debug.Log(elSolution);
-        }
+        //var result = logic.FindAllSolutions(spisokIsChetyrexCifr,operatorsList);
+
+
+        
 
 
 

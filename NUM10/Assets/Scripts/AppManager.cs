@@ -1,98 +1,93 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class AppManager : MonoBehaviour
 {
-    private ILevelsView m_LevelsView;
+    [SerializeField]
+    private TextMeshProUGUI m_TargetField;
 
-    private ICalcView m_CalcView;
+    [SerializeField]
+    private TextMeshProUGUI m_ResultField;
 
     [SerializeField]
     private Button m_ResetButton;
 
     [SerializeField]
-    private Button m_SumButton;
+    private OperatorButton m_SumButton;
 
     [SerializeField]
-    private Button m_DivButton;
+    private OperatorButton m_DivButton;
 
     [SerializeField]
-    private Button m_MulButton;
+    private OperatorButton m_MulButton;
 
     [SerializeField]
-    private Button m_SubButton;
+    private OperatorButton m_SubButton;
 
     [SerializeField]
-    private Button m_Num1Button;
+    private NumberButton m_Num1Button;
 
     [SerializeField]
-    private Button m_Num2Button;
+    private NumberButton m_Num2Button;
 
     [SerializeField]
-    private Button m_Num3Button;
+    private NumberButton m_Num3Button;
 
     [SerializeField]
-    private Button m_Num4Button;
+    private NumberButton m_Num4Button;
 
+    private List<int> m_TestTaskList = new List<int>();
 
+    
     private void Start()
     {
+        
+        
+        m_TestTaskList.Add(Random.Range(1, 10));
+        m_TestTaskList.Add(Random.Range(1, 10));
+        m_TestTaskList.Add(Random.Range(1, 10));
+        m_TestTaskList.Add(Random.Range(1, 10));
+        
+        m_SumButton.SetContent(Operator.Sum,OnOperatorButtonClick);
+        m_SubButton.SetContent(Operator.Sub,OnOperatorButtonClick);
+        m_DivButton.SetContent(Operator.Div,OnOperatorButtonClick);
+        m_MulButton.SetContent(Operator.Mul,OnOperatorButtonClick);
+
+
         m_ResetButton.onClick.AddListener(OnResetButtonClick);
-        m_SumButton.onClick.AddListener(OnSumButtonClick);
-        m_DivButton.onClick.AddListener(OnDivButtonClick);
-        m_MulButton.onClick.AddListener(OnMulButtonClick);
-        m_SubButton.onClick.AddListener(OnSubButtonClick);
-        m_Num1Button.onClick.AddListener(OnNum1ButtonClick);
-        m_Num2Button.onClick.AddListener(OnNum2ButtonClick);
-        m_Num3Button.onClick.AddListener(OnNum3ButtonClick);
-        m_Num4Button.onClick.AddListener(OnNum4ButtonClick);
+        
+        m_Num1Button.SetValue(m_TestTaskList[0],OnNumberButtonClick);
+        m_Num2Button.SetValue(m_TestTaskList[1],OnNumberButtonClick);
+        m_Num3Button.SetValue(m_TestTaskList[2],OnNumberButtonClick);
+        m_Num4Button.SetValue(m_TestTaskList[3],OnNumberButtonClick);
+
+
+        }
+
+    private void OnNumberButtonClick(int obj)
+    {
+        Debug.Log($"Number {obj} is pressed");
     }
 
-    private void OnNum4ButtonClick()
+    private void OnOperatorButtonClick(Operator obj)
     {
-        Debug.Log("4");
+        Debug.Log(obj.ToString()); 
     }
 
-    private void OnNum3ButtonClick()
-    {
-        Debug.Log("3");
-    }
+    
+    
+    
+    
+    
 
-    private void OnNum2ButtonClick()
-    {
-        Debug.Log("2");
-    }
-
-    private void OnMulButtonClick()
-    {
-        Debug.Log("*");
-    }
-
-    private void OnNum1ButtonClick()
-    {
-        Debug.Log("1");
-    }
-
-    private void OnSubButtonClick()
-    {
-        Debug.Log("-");
-    }
-
-    private void OnDivButtonClick()
-    {
-        Debug.Log("/");
-    }
-
-    private void OnSumButtonClick()
-    {
-        Debug.Log("+");
-    }
+    
+    
 
     private void OnResetButtonClick()
     {
-        Debug.Log("fuck");
+        Debug.Log("reset level");
     }
 }
