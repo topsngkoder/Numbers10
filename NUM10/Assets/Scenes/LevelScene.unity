@@ -2084,6 +2084,9 @@ MonoBehaviour:
   m_Num2Button: {fileID: 7430812610127530142}
   m_Num3Button: {fileID: 7430812608937129572}
   m_Num4Button: {fileID: 7430812609883208980}
+  m_Target: 10
+  m_Resolution: 4
+  m_Operators: 040000000200000003000000
 --- !u!4 &7430812610079668315
 Transform:
   m_ObjectHideFlags: 0

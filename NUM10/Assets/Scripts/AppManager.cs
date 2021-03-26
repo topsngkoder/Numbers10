@@ -43,24 +43,23 @@ public class AppManager : MonoBehaviour
     private List<NumberButton> m_NumberButtons;
 
     private List<int> m_TestTaskList = new List<int>();
-    private SolutionsFinder m_SolutionsFinder = new SolutionsFinder();
+    
+    private readonly SolutionsFinder m_SolutionsFinder = new SolutionsFinder();
 
 
     private int? m_Answer;
     private Operator m_CurrentOperator;
     private int m_StepsLeft;
 
-    private const int Target = 10;
-    private const int Resolution = 4;
+    [SerializeField]
+    private int m_Target;
+    [SerializeField]
+    private int m_Resolution;
 
-    private List<Operator> opers = new List<Operator>()
-    {
-        Operator.Div,
-        Operator.Mul,
-        Operator.Sub,
-        Operator.Sub
-    };
-
+    [SerializeField]
+    private List<Operator> m_Operators;
+    
+ 
 
     private void Start()
     {
@@ -92,17 +91,18 @@ public class AppManager : MonoBehaviour
         m_Answer = null;
         m_CurrentOperator = Operator.None;
         m_ResultField.text = ".";
-        m_StepsLeft = Resolution - 1;
+        m_StepsLeft = m_Resolution - 1;
     }
 
-    private bool IsItPossible(List<int> numbers)
+    private bool IsItPossible(List<int> numbers, int target, List<Operator> operators)
     {
-        var solutions = m_SolutionsFinder.FindAllSolutions(numbers,opers);
+        var solutions = m_SolutionsFinder.FindAllSolutions(numbers,operators);
+        
         foreach (var elem in solutions)
         {
-            if (elem.Result==Target)
+            if (elem.Result==target)
             {
-                Debug.Log(elem.ToString());
+                //Debug.Log(elem.ToString());
                 return true;
             }
             
@@ -113,7 +113,7 @@ public class AppManager : MonoBehaviour
 
     private void LevelStart()
     {
-        m_TestTaskList = GetTaskList(Resolution);
+        m_TestTaskList = GetTaskList(m_Resolution);
 
 
         for (var i = 0; i < m_NumberButtons.Count; i++)
@@ -121,7 +121,7 @@ public class AppManager : MonoBehaviour
             m_NumberButtons[i].SetValue(m_TestTaskList[i], OnNumberButtonClick);
         }
 
-        if (!IsItPossible(m_TestTaskList))
+        if (!IsItPossible(m_TestTaskList,m_Target, m_Operators))
         {
             Debug.Log("NOT POSSIBLE");
             LevelStart();
@@ -169,7 +169,7 @@ public class AppManager : MonoBehaviour
                 m_StepsLeft--;
                 if (m_StepsLeft > 0)
                     return;
-                if (m_Answer == Target)
+                if (m_Answer == m_Target)
                 {
                     LevelStart();
                 }
