@@ -9,7 +9,7 @@ public class NumberButton: MonoBehaviour
     [SerializeField]
     private Button m_Button;
 
-    private Action<int> m_OnClickEvent;
+    private Action<int,Button> m_OnClickEvent;
 
     private void Awake()
     {
@@ -18,13 +18,24 @@ public class NumberButton: MonoBehaviour
 
     private void OnClick()
     {
-        m_OnClickEvent.Invoke(m_Number);
+        m_OnClickEvent.Invoke(m_Number, m_Button);
     }
 
-    public void SetValue(int value, Action<int> onClick)
+    public void SetValue(int value, Action<int, Button> onClick)
     {
         m_Number = value;
         m_OnClickEvent = onClick;
+        m_Button.GetComponentInChildren<Text>().text = value.ToString();
+    }
+
+    public void Deactivate()
+    {
+        m_Button.interactable = false;
+    }
+    
+    public void Activate()
+    {
+        m_Button.interactable = true;
     }
     
     

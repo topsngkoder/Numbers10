@@ -28,6 +28,10 @@ namespace LogicDenisKo
             
         }
 
+        public bool GotResult => Result != null;
+
+        
+
         public Operator Operator { get; }
         public Operation Clone => new Operation(A, Operator, B);
 
