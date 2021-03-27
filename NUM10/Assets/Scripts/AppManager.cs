@@ -43,7 +43,7 @@ public class AppManager : MonoBehaviour
     private List<NumberButton> m_NumberButtons;
 
     private List<int> m_TestTaskList = new List<int>();
-    
+
     private readonly SolutionsFinder m_SolutionsFinder = new SolutionsFinder();
 
 
@@ -53,13 +53,13 @@ public class AppManager : MonoBehaviour
 
     [SerializeField]
     private int m_Target;
+
     [SerializeField]
     private int m_Resolution;
 
     [SerializeField]
     private List<Operator> m_Operators;
-    
- 
+
 
     private void Start()
     {
@@ -78,7 +78,7 @@ public class AppManager : MonoBehaviour
 
         m_ResetButton.onClick.AddListener(OnResetButtonClick);
 
-        LevelStart();
+        LevelStart(GetTaskList());
     }
 
     private void ResetLevel()
@@ -96,46 +96,41 @@ public class AppManager : MonoBehaviour
 
     private bool IsItPossible(List<int> numbers, int target, List<Operator> operators)
     {
-        var solutions = m_SolutionsFinder.FindAllSolutions(numbers,operators);
-        
+        var solutions = m_SolutionsFinder.FindAllSolutions(numbers, operators);
+
         foreach (var elem in solutions)
         {
-            if (elem.Result==target)
-            {
-                //Debug.Log(elem.ToString());
-                return true;
-            }
-            
+            if (elem.Result != target) continue;
+            //Debug.Log(elem.ToString());
+            return true;
         }
-        return false;
 
+        return false;
     }
 
-    private void LevelStart()
+    private void LevelStart(List<int> taskList)
     {
-        m_TestTaskList = GetTaskList(m_Resolution);
-
-
         for (var i = 0; i < m_NumberButtons.Count; i++)
         {
-            m_NumberButtons[i].SetValue(m_TestTaskList[i], OnNumberButtonClick);
-        }
-
-        if (!IsItPossible(m_TestTaskList,m_Target, m_Operators))
-        {
-            Debug.Log("NOT POSSIBLE");
-            LevelStart();
+            m_NumberButtons[i].SetValue(taskList[i], OnNumberButtonClick);
         }
 
         ResetLevel();
     }
 
-    private List<int> GetTaskList(int resolution)
+    private List<int> GetTaskList()
     {
         var taskList = new List<int>();
-        for (int i = 0; i < resolution; i++)
+
+        for (int i = 0; i < m_Resolution; i++)
         {
             taskList.Add(Random.Range(1, 10));
+        }
+
+        if (!IsItPossible(taskList, m_Target, m_Operators))
+        {
+            Debug.Log("NOT POSSIBLE");
+            return GetTaskList();
         }
 
         return taskList;
@@ -158,7 +153,7 @@ public class AppManager : MonoBehaviour
         }
         else
         {
-            var operation = new LogicDenisKo.Operation((int) m_Answer, m_CurrentOperator, obj);
+            var operation = new Operation((int) m_Answer, m_CurrentOperator, obj);
 
             if (operation.GotResult)
             {
@@ -171,7 +166,7 @@ public class AppManager : MonoBehaviour
                     return;
                 if (m_Answer == m_Target)
                 {
-                    LevelStart();
+                    LevelStart(GetTaskList());
                 }
             }
             else
