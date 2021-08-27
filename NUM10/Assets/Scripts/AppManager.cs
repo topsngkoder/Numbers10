@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using LogicDenisKo;
 using TMPro;
 using UnityEngine;
@@ -60,6 +61,8 @@ public class AppManager : MonoBehaviour
     [SerializeField]
     private List<Operator> m_Operators;
 
+    private int m_LevelCounter;
+    private List<List<int>> m_AllCombinations = new List<List<int>>();
 
     private void Start()
     {
@@ -69,6 +72,8 @@ public class AppManager : MonoBehaviour
         m_NumberButtons.Add(m_Num3Button);
         m_NumberButtons.Add(m_Num4Button);
 
+        m_AllCombinations = AllDifferentCombinationsOfNumbers(m_Resolution);
+        m_LevelCounter = 0;
 
         m_SumButton.SetContent(Operator.Sum, OnOperatorButtonClick);
         m_SubButton.SetContent(Operator.Sub, OnOperatorButtonClick);
@@ -78,7 +83,8 @@ public class AppManager : MonoBehaviour
 
         m_ResetButton.onClick.AddListener(OnResetButtonClick);
 
-        LevelStart(GetTaskList());
+        LevelStart(GetTaskList(m_LevelCounter));
+        //m_LevelCounter++;
     }
 
     private void ResetLevel()
@@ -90,7 +96,7 @@ public class AppManager : MonoBehaviour
 
         m_Answer = null;
         m_CurrentOperator = Operator.None;
-        m_ResultField.text = ".";
+        m_ResultField.text = "_ _ _ _";
         m_StepsLeft = m_Resolution - 1;
     }
 
@@ -101,7 +107,6 @@ public class AppManager : MonoBehaviour
         foreach (var elem in solutions)
         {
             if (elem.Result != target) continue;
-            //Debug.Log(elem.ToString());
             return true;
         }
 
@@ -118,22 +123,20 @@ public class AppManager : MonoBehaviour
         ResetLevel();
     }
 
-    private List<int> GetTaskList()
+    private List<int> GetTaskList(int index)
     {
-        var taskList = new List<int>();
+        var taskList = AllDifferentCombinationsOfNumbers(m_Resolution);
 
-        for (int i = 0; i < m_Resolution; i++)
+        
+
+        /*if (!IsItPossible(taskList[index], m_Target, m_Operators))
         {
-            taskList.Add(Random.Range(1, 10));
+            Debug.Log($"on index = {m_LevelCounter} is NOT POSSIBLE");
+            m_LevelCounter++;
+            return GetTaskList(m_LevelCounter);
         }
-
-        if (!IsItPossible(taskList, m_Target, m_Operators))
-        {
-            Debug.Log("NOT POSSIBLE");
-            return GetTaskList();
-        }
-
-        return taskList;
+        Debug.Log($"index = {m_LevelCounter}");*/
+        return taskList[m_LevelCounter];
     }
 
 
@@ -150,6 +153,7 @@ public class AppManager : MonoBehaviour
             }
 
             button.GetComponentInParent<NumberButton>().Deactivate();
+           
         }
         else
         {
@@ -166,7 +170,8 @@ public class AppManager : MonoBehaviour
                     return;
                 if (m_Answer == m_Target)
                 {
-                    LevelStart(GetTaskList());
+                    m_LevelCounter++;
+                    LevelStart(GetTaskList(m_LevelCounter));
                 }
             }
             else
@@ -188,4 +193,90 @@ public class AppManager : MonoBehaviour
     {
         ResetLevel();
     }
+
+    List<int> IntToList(int value)
+    {
+        List<int> result = new List<int>();
+        int number = value;
+        for (int i = 0; i < value.ToString().Length; i++)
+        {
+            if (number % 10 == 0)
+            {
+                return new List<int>();
+            }
+            result.Add(number % 10);
+            number = number / 10;
+        }
+        return result;
+    }
+
+    int ListToInt(List<int> value)
+    {
+        int result = 0;
+
+        foreach (var item in value)
+        {
+            result = result * 10 + item;
+        }
+        return result;
+    }
+
+    void Shuffle(List<List<int>> list)
+    {  
+    int n = list.Count;  
+    while (n > 1) {  
+        n--;
+        int k = Random.Range(0, n - 1);  
+        var value = list[k];  
+        list[k] = list[n];  
+        list[n] = value;  
+    }  
+}
+
+
+
+    List<List<int>> AllDifferentCombinationsOfNumbers(int length)
+    {
+        int minNumber = 1, maxNumber = 9;
+
+        for (int i = 1; i < length; i++)
+        {
+            minNumber = minNumber * 10 + 1;
+            maxNumber = maxNumber * 10 + 9;
+        }
+
+        List<int> combinations = new List<int>();
+
+        for (int i = minNumber; i <= maxNumber; i++)
+        {
+            if (IntToList(i).Count == length)
+            {
+                List<int> combination = IntToList(i);
+                combination.Sort();
+
+                combinations.Add(ListToInt(combination));
+
+            }
+
+        }
+
+        combinations.Sort();
+
+        var sortedCombinations = combinations.Distinct().ToList();
+
+        var result = new List<List<int>>();
+        foreach (var item in sortedCombinations)
+
+        {
+            if (IsItPossible(IntToList(item), m_Target, m_Operators))
+            {
+                result.Add(IntToList(item));
+            }
+        }
+        Shuffle(result);
+
+        
+        return result;
+    }
+    
 }

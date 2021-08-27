@@ -19,6 +19,7 @@ public class NumberButton: MonoBehaviour
     private void OnClick()
     {
         m_OnClickEvent.Invoke(m_Number, m_Button);
+        
     }
 
     public void SetValue(int value, Action<int, Button> onClick)
@@ -31,11 +32,13 @@ public class NumberButton: MonoBehaviour
     public void Deactivate()
     {
         m_Button.interactable = false;
+        m_Button.gameObject.SetActive(false);       
     }
     
     public void Activate()
     {
         m_Button.interactable = true;
+        m_Button.gameObject.SetActive(true);
     }
     
     
