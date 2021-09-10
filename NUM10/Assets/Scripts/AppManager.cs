@@ -41,6 +41,25 @@ public class AppManager : MonoBehaviour
     [SerializeField]
     private NumberButton m_Num4Button;
 
+    [SerializeField]
+    private Button m_MenuButton;
+
+    [SerializeField]
+    private MenuWindow m_menuWindow;
+
+    [SerializeField]
+    private Button m_LevelSelectWindowButton;
+
+    [SerializeField]
+    private LevelSelectWindow m_LevelSelectWindow;
+
+    [SerializeField]
+    private LevelWindow m_GameWindow;
+
+    [SerializeField]
+    private Button m_GameWindowButton;
+
+
     private List<NumberButton> m_NumberButtons;
 
     private List<int> m_TestTaskList = new List<int>();
@@ -82,6 +101,10 @@ public class AppManager : MonoBehaviour
 
 
         m_ResetButton.onClick.AddListener(OnResetButtonClick);
+        m_MenuButton.onClick.AddListener(OnMenuButtonClick);
+        m_LevelSelectWindowButton.onClick.AddListener(OnLevelSelectButtonClick);
+        m_GameWindowButton.onClick.AddListener(OnGameButtonClick);
+        
 
         LevelStart(GetTaskList(m_LevelCounter));
         //m_LevelCounter++;
@@ -113,7 +136,7 @@ public class AppManager : MonoBehaviour
         return false;
     }
 
-    private void LevelStart(List<int> taskList)
+    public void LevelStart(List<int> taskList)
     {
         for (var i = 0; i < m_NumberButtons.Count; i++)
         {
@@ -192,6 +215,21 @@ public class AppManager : MonoBehaviour
     private void OnResetButtonClick()
     {
         ResetLevel();
+    }
+
+    private void OnMenuButtonClick()
+    {
+        m_menuWindow.gameObject.SetActive(!m_menuWindow.isActiveAndEnabled); 
+    }
+    private void OnLevelSelectButtonClick()
+    {
+        m_LevelSelectWindow.gameObject.SetActive(!m_LevelSelectWindow.isActiveAndEnabled);
+    }
+    private void OnGameButtonClick()
+    {
+        m_GameWindow.gameObject.SetActive(!m_GameWindow.isActiveAndEnabled);
+        List<int> testTask = new List<int> { 1, 2, 3, 4 };
+        m_GameWindow.LoadLevel(testTask,10);
     }
 
     List<int> IntToList(int value)
