@@ -1,12 +1,26 @@
 ﻿using UnityEngine;
-
+using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class LevelView: MonoBehaviour
 {
-    private int levelNumber;
+    private List<int> m_numbers;
+    private string m_name;
+    [SerializeField]
+    private Text text;
 
-    public void SetLevel(int leveNumber)
+    
+
+
+    public void SetNumbers(List<int> data)
     {
-        this.levelNumber = leveNumber;
+        m_numbers = data;
     }
+
+    public void SetName(string data)
+    {
+        text.text = data;
+        
+    }
+
 }

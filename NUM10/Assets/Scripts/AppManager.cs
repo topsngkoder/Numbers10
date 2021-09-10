@@ -83,6 +83,9 @@ public class AppManager : MonoBehaviour
     private int m_LevelCounter;
     private List<List<int>> m_AllCombinations = new List<List<int>>();
 
+    private LevelData m_levelData;
+    
+
     private void Start()
     {
         m_NumberButtons = new List<NumberButton>();
@@ -92,6 +95,8 @@ public class AppManager : MonoBehaviour
         m_NumberButtons.Add(m_Num4Button);
 
         m_AllCombinations = AllDifferentCombinationsOfNumbers(m_Resolution);
+        m_levelData.numbers = m_AllCombinations;
+        m_LevelSelectWindow.SetData(m_levelData);
         m_LevelCounter = 0;
 
         m_SumButton.SetContent(Operator.Sum, OnOperatorButtonClick);
@@ -229,7 +234,7 @@ public class AppManager : MonoBehaviour
     {
         m_GameWindow.gameObject.SetActive(!m_GameWindow.isActiveAndEnabled);
         List<int> testTask = new List<int> { 1, 2, 3, 4 };
-        m_GameWindow.LoadLevel(testTask,10);
+       
     }
 
     List<int> IntToList(int value)

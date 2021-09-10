@@ -87,6 +87,7 @@ GameObject:
   - component: {fileID: 3505845830107848064}
   - component: {fileID: 3505845830107848065}
   - component: {fileID: 3505845830107848066}
+  - component: {fileID: 5835243821384175823}
   m_Layer: 0
   m_Name: LevelSelectWindow
   m_TagString: Untagged
@@ -175,6 +176,21 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &5835243821384175823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3505845830107848068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 423dc9d199c7847c481ea9504844c864, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_levelPrefab: {fileID: 310447107298703998, guid: cf7c299f8403447eabb5a290b57b7726,
+    type: 3}
+  m_LevelsPanel: {fileID: 3505845829808209034}
 --- !u!1 &3505845830272441763
 GameObject:
   m_ObjectHideFlags: 0
