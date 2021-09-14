@@ -1,26 +1,39 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections.Generic;
+using TMPro;
+using System;
 
 public class LevelView: MonoBehaviour
 {
-    private List<int> m_numbers;
-    private string m_name;
     [SerializeField]
-    private Text text;
+    private TextMeshProUGUI text;
+    [SerializeField]
+    private Button button;
+
+    public struct Data
+    {
+        public string Name;
+        public int Index;
+        public Action<int> OnClick;
+    }
+
+    private Data _data;
+
+    private void Awake()
+    {
+        button.onClick.AddListener(OnClick);
+    }
 
     
 
-
-    public void SetNumbers(List<int> data)
+    public void SetData(Data data)
     {
-        m_numbers = data;
+        _data = data;
+        text.text = _data.Name;
     }
 
-    public void SetName(string data)
+    private void OnClick()
     {
-        text.text = data;
-        
+        _data.OnClick.Invoke(_data.Index);
     }
-
 }

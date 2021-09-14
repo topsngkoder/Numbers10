@@ -2,7 +2,7 @@
 
     public struct LevelData
     {
-        public List<List<int>> numbers;
+        public List<LevelView.Data> Levels;
 
     }
 

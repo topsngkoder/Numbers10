@@ -95,8 +95,12 @@ public class AppManager : MonoBehaviour
         m_NumberButtons.Add(m_Num4Button);
 
         m_AllCombinations = AllDifferentCombinationsOfNumbers(m_Resolution);
-        m_levelData.numbers = m_AllCombinations;
-        m_LevelSelectWindow.SetData(m_levelData);
+        //m_levelData.Levels = m_AllCombinations;
+
+        
+
+
+        
         m_LevelCounter = 0;
 
         m_SumButton.SetContent(Operator.Sum, OnOperatorButtonClick);
@@ -109,9 +113,9 @@ public class AppManager : MonoBehaviour
         m_MenuButton.onClick.AddListener(OnMenuButtonClick);
         m_LevelSelectWindowButton.onClick.AddListener(OnLevelSelectButtonClick);
         m_GameWindowButton.onClick.AddListener(OnGameButtonClick);
-        
 
-        LevelStart(GetTaskList(m_LevelCounter));
+        OnLevelSelectButtonClick();
+        //LevelStart(m_LevelCounter);
         //m_LevelCounter++;
     }
 
@@ -141,8 +145,12 @@ public class AppManager : MonoBehaviour
         return false;
     }
 
-    public void LevelStart(List<int> taskList)
+    public void LevelStart(int index)
     {
+        var taskList = m_AllCombinations[index];
+
+
+
         for (var i = 0; i < m_NumberButtons.Count; i++)
         {
             m_NumberButtons[i].SetValue(taskList[i], OnNumberButtonClick);
@@ -155,15 +163,7 @@ public class AppManager : MonoBehaviour
     {
         var taskList = AllDifferentCombinationsOfNumbers(m_Resolution);
 
-        
-
-        /*if (!IsItPossible(taskList[index], m_Target, m_Operators))
-        {
-            Debug.Log($"on index = {m_LevelCounter} is NOT POSSIBLE");
-            m_LevelCounter++;
-            return GetTaskList(m_LevelCounter);
-        }
-        Debug.Log($"index = {m_LevelCounter}");*/
+                
         return taskList[m_LevelCounter];
     }
 
@@ -199,7 +199,7 @@ public class AppManager : MonoBehaviour
                 if (m_Answer == m_Target)
                 {
                     m_LevelCounter++;
-                    LevelStart(GetTaskList(m_LevelCounter));
+                    LevelStart(m_LevelCounter);
                 }
             }
             else
@@ -226,15 +226,35 @@ public class AppManager : MonoBehaviour
     {
         m_menuWindow.gameObject.SetActive(!m_menuWindow.isActiveAndEnabled); 
     }
+
+
     private void OnLevelSelectButtonClick()
     {
         m_LevelSelectWindow.gameObject.SetActive(!m_LevelSelectWindow.isActiveAndEnabled);
+
+        var levelsData = new LevelData
+        {
+            Levels = new List<LevelView.Data>()
+        };
+
+        for (int i = 0; i < m_AllCombinations.Count; i++)
+        {
+            levelsData.Levels.Add(new LevelView.Data
+            {
+                Name = i.ToString(),
+                OnClick = LevelStart
+
+            });
+
+        }
+        m_LevelSelectWindow.SetData(levelsData);
     }
+
+
     private void OnGameButtonClick()
     {
         m_GameWindow.gameObject.SetActive(!m_GameWindow.isActiveAndEnabled);
-        List<int> testTask = new List<int> { 1, 2, 3, 4 };
-       
+               
     }
 
     List<int> IntToList(int value)
