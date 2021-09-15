@@ -84,7 +84,7 @@ public class AppManager : MonoBehaviour
     private List<List<int>> m_AllCombinations = new List<List<int>>();
 
     private LevelData m_levelData;
-    
+
 
     private void Start()
     {
@@ -94,13 +94,13 @@ public class AppManager : MonoBehaviour
         m_NumberButtons.Add(m_Num3Button);
         m_NumberButtons.Add(m_Num4Button);
 
-        m_AllCombinations = AllDifferentCombinationsOfNumbers(m_Resolution);
+       m_AllCombinations = AllDifferentCombinationsOfNumbers(m_Resolution);
         //m_levelData.Levels = m_AllCombinations;
 
-        
 
 
-        
+
+
         m_LevelCounter = 0;
 
         m_SumButton.SetContent(Operator.Sum, OnOperatorButtonClick);
@@ -111,10 +111,10 @@ public class AppManager : MonoBehaviour
 
         m_ResetButton.onClick.AddListener(OnResetButtonClick);
         m_MenuButton.onClick.AddListener(OnMenuButtonClick);
-        m_LevelSelectWindowButton.onClick.AddListener(OnLevelSelectButtonClick);
+        m_LevelSelectWindowButton.onClick.AddListener(OnLevelSelectWindowButtonClick);
         m_GameWindowButton.onClick.AddListener(OnGameButtonClick);
 
-        OnLevelSelectButtonClick();
+        
         //LevelStart(m_LevelCounter);
         //m_LevelCounter++;
     }
@@ -147,6 +147,8 @@ public class AppManager : MonoBehaviour
 
     public void LevelStart(int index)
     {
+        Debug.Log("lvl " + index + " start");
+
         var taskList = m_AllCombinations[index];
 
 
@@ -157,13 +159,16 @@ public class AppManager : MonoBehaviour
         }
 
         ResetLevel();
+        m_LevelSelectWindow.gameObject.SetActive(false);
+        m_GameWindow.gameObject.SetActive(true);
+        m_menuWindow.gameObject.SetActive(false);
     }
 
     private List<int> GetTaskList(int index)
     {
         var taskList = AllDifferentCombinationsOfNumbers(m_Resolution);
 
-                
+
         return taskList[m_LevelCounter];
     }
 
@@ -181,15 +186,15 @@ public class AppManager : MonoBehaviour
             }
 
             button.GetComponentInParent<NumberButton>().Deactivate();
-           
+
         }
         else
         {
-            var operation = new Operation((int) m_Answer, m_CurrentOperator, obj);
+            var operation = new Operation((int)m_Answer, m_CurrentOperator, obj);
 
             if (operation.GotResult)
             {
-                m_Answer = (int) operation.Result;
+                m_Answer = (int)operation.Result;
                 m_CurrentOperator = Operator.None;
                 m_ResultField.text = m_Answer.ToString();
                 button.GetComponentInParent<NumberButton>().Deactivate();
@@ -224,13 +229,20 @@ public class AppManager : MonoBehaviour
 
     private void OnMenuButtonClick()
     {
-        m_menuWindow.gameObject.SetActive(!m_menuWindow.isActiveAndEnabled); 
+        m_GameWindow.gameObject.SetActive(false);
+        m_LevelSelectWindow.gameObject.SetActive(false);
+        m_menuWindow.gameObject.SetActive(true);
     }
 
+    
 
-    private void OnLevelSelectButtonClick()
+
+
+    private void OnLevelSelectWindowButtonClick()
     {
-        m_LevelSelectWindow.gameObject.SetActive(!m_LevelSelectWindow.isActiveAndEnabled);
+        m_LevelSelectWindow.gameObject.SetActive(true);
+        m_GameWindow.gameObject.SetActive(false);
+        m_menuWindow.gameObject.SetActive(false);
 
         var levelsData = new LevelData
         {
@@ -242,6 +254,7 @@ public class AppManager : MonoBehaviour
             levelsData.Levels.Add(new LevelView.Data
             {
                 Name = i.ToString(),
+                Index = i,
                 OnClick = LevelStart
 
             });
@@ -253,9 +266,21 @@ public class AppManager : MonoBehaviour
 
     private void OnGameButtonClick()
     {
-        m_GameWindow.gameObject.SetActive(!m_GameWindow.isActiveAndEnabled);
-               
+        m_GameWindow.gameObject.SetActive(true);
+        m_LevelSelectWindow.gameObject.SetActive(false);
+        m_menuWindow.gameObject.SetActive(false);
+
+
+
     }
+
+
+
+
+
+
+
+
 
     List<int> IntToList(int value)
     {
@@ -285,16 +310,17 @@ public class AppManager : MonoBehaviour
     }
 
     void Shuffle(List<List<int>> list)
-    {  
-    int n = list.Count;  
-    while (n > 1) {  
-        n--;
-        int k = Random.Range(0, n - 1);  
-        var value = list[k];  
-        list[k] = list[n];  
-        list[n] = value;  
-    }  
-}
+    {
+        int n = list.Count;
+        while (n > 1)
+        {
+            n--;
+            int k = Random.Range(0, n - 1);
+            var value = list[k];
+            list[k] = list[n];
+            list[n] = value;
+        }
+    }
 
 
 
@@ -338,8 +364,8 @@ public class AppManager : MonoBehaviour
         }
         Shuffle(result);
 
-        
+
         return result;
     }
-    
+
 }
